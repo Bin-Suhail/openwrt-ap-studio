@@ -1,0 +1,137 @@
+{
+  "board": {
+    "board_name": "vendor,modern-board",
+    "model": "Fixture AP",
+    "kernel": "6.6",
+    "release": {
+      "version": "Fixture"
+    }
+  },
+  "devices": {
+    "br-lan": {
+      "mac": "02:00:00:00:00:01",
+      "bridge": true,
+      "up": true,
+      "ports": [
+        "lan1",
+        "lan2",
+        "lan3"
+      ],
+      "ipaddrs": [
+        {
+          "address": "192.168.1.21"
+        }
+      ]
+    },
+    "wan": {
+      "devtype": "dsa",
+      "wireless": false,
+      "up": false
+    },
+    "phy-wifi0": {
+      "wireless": true,
+      "up": true,
+      "master": "br-lan"
+    },
+    "phy-wifi1": {
+      "wireless": true,
+      "up": true,
+      "master": "br-lan"
+    }
+  },
+  "network": {
+    "values": {
+      "loopback": {
+        ".type": "interface",
+        "proto": "static",
+        "device": "lo",
+        "ipaddr": "127.0.0.1"
+      },
+      "bridge": {
+        ".type": "device",
+        ".anonymous": true,
+        "type": "bridge",
+        "name": "br-lan",
+        "ports": [
+          "lan1",
+          "lan2",
+          "lan3"
+        ],
+        "ageing_time": "30"
+      },
+      "lan": {
+        ".type": "interface",
+        "proto": "static",
+        "device": "br-lan",
+        "ipaddr": "192.168.1.21",
+        "netmask": "255.255.255.0"
+      }
+    }
+  },
+  "wireless": {
+    "values": {
+      "radio0": {
+        ".type": "wifi-device",
+        "type": "mac80211",
+        "band": "2g",
+        "channel": "auto"
+      },
+      "radio1": {
+        ".type": "wifi-device",
+        "type": "mac80211",
+        "band": "5g",
+        "channel": "36"
+      },
+      "wifi0": {
+        ".type": "wifi-iface",
+        "device": "radio0",
+        "mode": "ap",
+        "network": "lan",
+        "ssid": "Original 2G",
+        "encryption": "none"
+      },
+      "wifi1": {
+        ".type": "wifi-iface",
+        "device": "radio1",
+        "mode": "ap",
+        "network": "lan",
+        "ssid": "Original 5G",
+        "encryption": "psk2",
+        "key": "old-wifi-key"
+      }
+    }
+  },
+  "system": {
+    "values": {
+      "sys": {
+        ".type": "system",
+        "hostname": "new-ap",
+        "timezone": "UTC"
+      }
+    }
+  },
+  "dhcp": {
+    "values": {
+      "lan": {
+        ".type": "dhcp",
+        "interface": "lan",
+        "dhcpv4": "server",
+        "ignore": "1"
+      },
+      "odhcpd": {
+        ".type": "odhcpd",
+        "maindhcp": "0"
+      }
+    }
+  },
+  "watchcat": {
+    "values": {
+      "monitor": {
+        ".type": "watchcat",
+        "mode": "ping_reboot",
+        "period": "6h",
+        "pinghosts": "8.8.8.8"
+      }
+    }
+  }
+}
