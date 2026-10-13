@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python: ['3.10', '3.12']
@@ -22,7 +22,7 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: python scripts/sync_android.py --check
   android:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -34,7 +34,10 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Check preinstalled Android SDK
+        run: |
+          test -f "$ANDROID_HOME/platforms/android-36/android.jar"
+          printf 'sdk.dir=%s\n' "$ANDROID_HOME" > android/local.properties
       - run: python scripts/sync_android.py --check
       - run: sh gradlew --no-daemon assembleDebug
         working-directory: android
@@ -43,3 +46,4 @@ jobs:
           name: OpenWrt-AP-Studio-debug
           path: android/app/build/outputs/apk/debug/*.apk
           retention-days: 7
+
