@@ -59,9 +59,9 @@ jobs:
           test -n "$APK"
           cp "$APK" OpenWrt-AP-Studio.apk
           TAG="apk-${GITHUB_SHA}"
-          gh release create "$TAG" OpenWrt-AP-Studio.apk \\
-            --repo "$GITHUB_REPOSITORY" \\
-            --target "$GITHUB_SHA" \\
-            --title "OpenWrt AP Studio APK (${GITHUB_SHA:0:7})" \\
-            --notes "Automatic Android debug APK built from commit $GITHUB_SHA. For testing only." \\
+          gh release create "$TAG" OpenWrt-AP-Studio.apk \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "OpenWrt AP Studio APK (${GITHUB_SHA:0:7})" \
+            --notes "Automatic Android debug APK built from commit $GITHUB_SHA. For testing only." \
             --latest
